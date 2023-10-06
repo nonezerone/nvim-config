@@ -31,7 +31,7 @@ return require("packer").startup(function(use)
         "rebelot/kanagawa.nvim",
         as = "kanagawa",
         config = function()
-            vim.cmd("colorscheme kanagawa-dragon")
+            vim.cmd("colorscheme kanagawa-wave")
         end
     })
 
