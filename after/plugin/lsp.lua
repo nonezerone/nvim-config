@@ -1,44 +1,7 @@
-local lsp = require("lsp-zero")
+local lsp_zero = require("lsp-zero")
 
-lsp.preset("recommended")
-
-lsp.ensure_installed({
-	-- 'ruby_ls',
-	'solargraph',
-	'eslint',
-	'lua_ls',
-	'tsserver',
-})
-
-local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
-})
-
-lsp.set_preferences({
-    suggest_lsp_servers = false,
-    sign_icons = {
-        error = 'E',
-        warn = 'W',
-        hint = 'H',
-        info = 'I'
-    }
-})
-
--- ruby-lsp specific preferences
-lsp.on_attach(function(client, bufnr)
-    local opts = {buffer = bufnr, remap = false}
+lsp_zero.on_attach(function(client, bufnr)
+    local opts = { buffer = bufnr, remap = false }
 
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
@@ -52,57 +15,32 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
- 
--- -- ruby_ls specific settings
--- _timers = {}
--- local function setup_diagnostics(client, buffer)
---   if require("vim.lsp.diagnostic")._enable then
---     return
---   end
--- 
---   local diagnostic_handler = function()
---     local params = vim.lsp.util.make_text_document_params(buffer)
---     client.request("textDocument/diagnostic", { textDocument = params }, function(err, result)
---       if err then
---         local err_msg = string.format("diagnostics error - %s", vim.inspect(err))
---         vim.lsp.log.error(err_msg)
---       end
---       if not result then
---         return
---       end
---       vim.lsp.diagnostic.on_publish_diagnostics(
---         nil,
---         vim.tbl_extend("keep", params, { diagnostics = result.items }),
---         { client_id = client.id }
---       )
---     end)
---   end
--- 
---   diagnostic_handler() -- to request diagnostics on buffer when first attaching
--- 
---   vim.api.nvim_buf_attach(buffer, false, {
---     on_lines = function()
---       if _timers[buffer] then
---         vim.fn.timer_stop(_timers[buffer])
---       end
---       _timers[buffer] = vim.fn.timer_start(200, diagnostic_handler)
---     end,
---     on_detach = function()
---       if _timers[buffer] then
---         vim.fn.timer_stop(_timers[buffer])
---       end
---     end,
---   })
--- end
--- 
--- require("lspconfig").ruby_ls.setup({
---   on_attach = function(client, buffer)
---     setup_diagnostics(client, buffer)
---   end,
--- })
+require("mason").setup({})
+require("mason-lspconfig").setup({
+    ensure_installed = { "solargraph", "eslint", "tsserver" },
+    handlers = {
+        lsp_zero.default_setup,
+        lua_ls = function()
+            local lua_opts = lsp_zero.nvim_lua_ls()
+            require("lspconfig").lua_ls.setup(lua_opts)
+        end,
+    }
+})
 
-lsp.setup()
+local cmp = require("cmp")
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-vim.diagnostic.config({
-    virtual_text = true
+cmp.setup({
+    sources = {
+        { name = "path" },
+        { name = "nvim_lsp" },
+        { name = "nvim_lua" },
+    },
+    formatting = lsp_zero.cmp_format(),
+    mapping = cmp.mapping.preset.insert({
+        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+        ["<C-Space>"] = cmp.mapping.complete(),
+    }),
 })
