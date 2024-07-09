@@ -16,7 +16,7 @@ return {
             },
         })
 
-        vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+        vim.api.nvim_create_autocmd({"BufReadPost", "FileReadPost", "BufNewFile"}, {
             group = vim.api.nvim_create_augroup("CommonGroup", { clear = true }),
             pattern = { "*.erb", "*.eruby" },
             command = "set syntax=html",
