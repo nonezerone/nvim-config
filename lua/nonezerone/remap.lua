@@ -1,5 +1,6 @@
 -- Set leader key
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- File explore
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
