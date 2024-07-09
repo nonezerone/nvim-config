@@ -1,14 +1,12 @@
 require("nonezerone.remap")
 require("nonezerone.set")
-require("nonezerone.syntax")
 require("nonezerone.lazy_init")
 
 
 local augroup = vim.api.nvim_create_augroup
-local NoneOchenGroup = augroup('NoneOchen', {})
-
 local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup('HighlightYank', {})
+local NoneOchenGroup = augroup('NoneOchen', {})
 
 autocmd('TextYankPost', {
     group = yank_group,
@@ -25,6 +23,12 @@ autocmd({"BufWritePre"}, {
     group = NoneOchenGroup,
     pattern = "*",
     command = [[%s/\s\+$//e]],
+})
+
+autocmd("BufReadPost", {
+    group = NoneOchenGroup,
+    pattern = { "*.erb", "*.eruby" },
+    command = "set syntax=html",
 })
 
 autocmd('LspAttach', {
