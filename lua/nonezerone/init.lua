@@ -1,5 +1,5 @@
 require("nonezerone.remap")
-require("nonezerone.set")
+require("nonezerone.settings")
 require("nonezerone.lazy_init")
 
 
