@@ -61,11 +61,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*",
     command = [[%s/\s\+$//e]],
 })
-
-vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
-    group = vim.api.nvim_create_augroup("CommonGroup", { clear = true }),
-    pattern = { "*.erb", "*.eruby" },
-    callback = function()
-        vim.opt.syntax = "html"
-    end,
-})
