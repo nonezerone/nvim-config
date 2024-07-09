@@ -62,8 +62,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     command = [[%s/\s\+$//e]],
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-    group = vim.api.nvim_create_augroup("SwitchSyntaxGroup", { clear = tue }),
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+    group = vim.api.nvim_create_augroup("CommonGroup", { clear = true }),
     pattern = { "*.erb", "*.eruby" },
-    command = "set syntax=html",
+    callback = function()
+        vim.opt.syntax = "html"
+    end,
 })
