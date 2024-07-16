@@ -52,5 +52,9 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 -- Grant executable permission to current file
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
+vim.keymap.set("n", "<leader>trn", function()
+    vim.o.relativenumber = not vim.o.relativenumber
+end)
+
 -- Source current file
 vim.keymap.set("n", "<leader><leader>", function() vim.cmd("so") end)
