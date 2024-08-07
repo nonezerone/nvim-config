@@ -45,9 +45,16 @@ return {
                     },
                 },
             },
-            ruby_lsp = {},
+            ruby_lsp = {
+                settings = {
+                    init_options = {
+                        formatter = false
+                    },
+                },
+            },
             tsserver = {},
             gopls = {},
+            pylsp = {},
         }
 
         require("mason").setup()
