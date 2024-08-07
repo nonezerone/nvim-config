@@ -1,5 +1,6 @@
 return {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = { "RRethy/nvim-treesitter-endwise" },
     build = ":TSUpdate",
 
     config = function()
@@ -8,8 +9,13 @@ return {
             sync_install = false,
             auto_install = true,
 
-            indent = { enable = true, disable = { "ruby" }, },
-
+            indent = {
+                enable = true,
+                disable = { "ruby" },
+            },
+            endwise = {
+                enable = true,
+            },
             highlight = {
                 enable = true,
                 additional_vim_regex_highlighting = { "ruby" },
