@@ -48,7 +48,7 @@ return {
             ruby_lsp = {
                 settings = {
                     init_options = {
-                        formatter = false
+                        formatter = false,
                     },
                 },
             },
